@@ -1,0 +1,54 @@
+# Buddhist Certificate Configuration File
+
+# Basic paths
+excel_path: "input/0 REFUGE NAME FOR CODE.xlsx"
+template_pdf_path: "input/Refuge Vows Certificate.pdf"
+output_folder: "output"
+
+# Set to true for test mode with sample data
+test_mode: false
+
+# Map field names to Excel columns
+field_mappings:
+  email: "email"
+  full_name: "name"
+  tibetan_name: "refuge name"
+  name_translation: "translation"
+  date: "date"  # Will use date from Excel if available, otherwise auto-generate
+
+# Field used for filename creation
+name_field: "full_name"
+
+# Field configurations
+fields:
+  full_name:
+    x_percent: 51.5  # Percent of page width
+    y_percent: 42  # Percent of page height
+    font_size: 25
+    font: "input/fonts/Sabon.ttf"  # Path to font file (optional)
+    color: [0, 0, 0]  # RGB color (black)
+    alignment: "left"
+
+  date:
+    x_percent: 65.4
+    y_percent: 49.25
+    font_size: 16.5
+    font: "input/fonts/EBGaramond-Regular.ttf"
+    color: [0, 0, 0]
+    alignment: "left"
+
+  tibetan_name:
+    x_percent: 44
+    y_percent: 64.27
+    font_size: 21.5
+    font: "input/fonts/Sabon.ttf"  # Tibetan font
+    color: [0, 0, 0]
+    alignment: "center"
+
+  name_translation:
+    x_percent: 44
+    y_percent: 69.93
+    font_size: 23
+    font: "input/fonts/EBGaramond-Italic.ttf"
+    color: [0, 0, 0]
+    alignment: "center"
