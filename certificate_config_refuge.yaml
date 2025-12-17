@@ -3,7 +3,7 @@
 # Basic paths
 excel_path: "input/0 REFUGE NAME FOR CODE.xlsx"
 template_pdf_path: "input/Refuge Vows Certificate.pdf"
-output_folder: "output"
+output_folder: "output/refuge"
 
 # Set to true for test mode with sample data
 test_mode: false

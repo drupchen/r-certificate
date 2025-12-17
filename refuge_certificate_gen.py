@@ -66,6 +66,10 @@ def add_text_overlay(input_pdf_path, output_pdf_path, field_values, field_config
         # Get font size
         font_size = config.get('font_size', 12)
 
+        # Get font color
+        font_color = config.get('color', [0, 0, 0])
+        font_color = [c / 255.0 for c in font_color] # normalize colors
+
         # Check for text alignment
         alignment = config.get('alignment', 'left')  # Default is left alignment
 
@@ -108,6 +112,9 @@ def add_text_overlay(input_pdf_path, output_pdf_path, field_values, field_config
                 # Set the font and add the text
                 c.setFont(font_name, font_size)
 
+                # Set the font colour
+                c.setFillColorRGB(font_color[0], font_color[1], font_color[2])
+
                 # Handle text alignment
                 if alignment == 'center':
                     # ReportLab can handle centering directly
@@ -115,11 +122,11 @@ def add_text_overlay(input_pdf_path, output_pdf_path, field_values, field_config
                     c.drawCentredString(
                         page_width / 2,  # x position (center of page)
                         page_height - y,  # ReportLab uses bottom-left origin
-                        field_value
+                        field_value.strip()
                     )
                 else:
                     # Default left alignment
-                    c.drawString(x, page_height - y, field_value)
+                    c.drawString(x, page_height - y, field_value.strip())
 
                 # Save the PDF
                 c.save()
@@ -197,7 +204,7 @@ def add_text_overlay(input_pdf_path, output_pdf_path, field_values, field_config
 
     print(f"Saved modified PDF to {output_pdf_path}")
 
-def process_certificates(config):
+def process_certificates(config, mode):
     """
     Process all certificates from an Excel spreadsheet using YAML config
 
@@ -205,9 +212,10 @@ def process_certificates(config):
     - config: Dictionary containing all configuration from YAML file
     """
     # Get basic paths
-    excel_path = config.get('excel_path', 'refuge_names.xlsx')
-    template_pdf_path = config.get('template_pdf_path', 'certificate_template.pdf')
-    output_folder = config.get('output_folder', 'completed_certificates')
+
+    excel_path = config.get('excel_path')
+    template_pdf_path = config.get('template_pdf_path')
+    output_folder = config.get('output_folder')
 
     # Get field configurations
     field_configs = config.get('fields', {})
@@ -289,7 +297,7 @@ def process_certificates(config):
     print(f"Completed processing {len(df)} certificates.")
 
 
-def process_single_test(config):
+def process_single_test(config, mode):
     """
     Process a single test certificate with placeholder data
 
@@ -351,8 +359,17 @@ def main():
     """
     Main function to run the script
     """
+    # 1: refuge certificate
+    # 2: heart of buddhism certificate
+    mode = 2
+
     # Default config path
-    config_path = "certificate_config.yaml"
+    if mode == 1:
+        config_path = "certificate_config_refuge.yaml"
+    elif mode == 2:
+        config_path = "certificate_config_hb.yaml"
+    else:
+        exit("wrong mode")
 
     # Check if a config path was provided
     if len(sys.argv) > 1:
@@ -366,10 +383,10 @@ def main():
 
     if test_mode:
         print("Running in test mode with placeholder data...")
-        process_single_test(config)
+        process_single_test(config, mode)
     else:
         print("Processing certificates from Excel data...")
-        process_certificates(config)
+        process_certificates(config, mode)
 
     print(
         "\nIf the text positioning needs adjustment, modify the x_percent and y_percent values in your YAML configuration.")
